@@ -1,10 +1,21 @@
 import { ShieldCheckIcon } from "@heroicons/react/24/outline";
-import { signIn, useSession } from "next-auth/react";
+import {
+  SignInOptions,
+  SignInResponse,
+  signIn,
+  useSession,
+} from "next-auth/react";
 import Link from "next/link";
 import Router from "next/router";
 import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { SubmitHandler, useForm } from "react-hook-form";
+
+const signInWrapper = async (payload: SignInOptions) => {
+  const response = (await signIn("credentials", payload)) as SignInResponse;
+  if (!response.ok) throw new Error("Unable to login");
+  return response;
+};
 
 export default function Home() {
   const { register, handleSubmit } = useForm<{
@@ -16,13 +27,13 @@ export default function Home() {
     password: string;
   }> = async (data) =>
     await toast.promise(
-      signIn("credentials", {
+      signInWrapper({
         ...data,
         redirect: false,
       }),
       {
         loading: "Loading...",
-        success: "Logged in succesfully!",
+        success: "Logged in successfully!",
         error: "Error!",
       }
     );

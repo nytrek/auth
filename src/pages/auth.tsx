@@ -56,7 +56,7 @@ export default function Auth() {
                 }),
                 {
                   loading: "Loading...",
-                  success: "Logged out succesfully!",
+                  success: "Logged out successfully!",
                   error: "Error!",
                 }
               )
