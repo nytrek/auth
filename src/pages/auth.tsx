@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { signOut, useSession } from "next-auth/react";
 import Image, { ImageProps } from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
@@ -31,7 +32,7 @@ function BlurImage(props: ImageProps) {
 export default function Auth() {
   //https://medium.com/@romeobazil/share-auth-session-between-nextjs-multi-zones-apps-using-nextauth-js-5bab51bb7e31
   const router = useRouter();
-  const { status } = useSession({
+  const { data: session, status } = useSession({
     required: true,
     onUnauthenticated: () => router.push("/"),
   });
@@ -42,7 +43,9 @@ export default function Auth() {
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <BlurImage
-          src="https://api.dicebear.com/6.x/avataaars/svg?seed=auth"
+          src={
+            "https://api.dicebear.com/6.x/avataaars/svg?seed=" + session.user.id
+          }
           alt="avatar"
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
@@ -51,7 +54,13 @@ export default function Auth() {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <div>
+        <div className="space-y-6">
+          <Link
+            href={process.env.NEXT_PUBLIC_CHAT_URL!}
+            className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+          >
+            Chat
+          </Link>
           <button
             type="button"
             onClick={async () =>
@@ -66,7 +75,7 @@ export default function Auth() {
                 }
               )
             }
-            className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+            className="flex w-full justify-center rounded-md border border-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm"
           >
             Sign out
           </button>
