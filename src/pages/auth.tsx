@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import { signOut, useSession } from "next-auth/react";
 import Image, { ImageProps } from "next/image";
-import Router from "next/router";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { toast } from "react-hot-toast";
 
 //https://github.com/vercel/next.js/discussions/26168#discussioncomment-1863742
@@ -29,10 +29,15 @@ function BlurImage(props: ImageProps) {
 }
 
 export default function Auth() {
-  const { status } = useSession();
-  useEffect(() => {
-    if (status === "unauthenticated") Router.push("/");
-  }, [status]);
+  //https://medium.com/@romeobazil/share-auth-session-between-nextjs-multi-zones-apps-using-nextauth-js-5bab51bb7e31
+  const router = useRouter();
+  const { status } = useSession({
+    required: true,
+    onUnauthenticated: () => router.push("/"),
+  });
+  if (status === "loading") {
+    return <span>Loading...</span>;
+  }
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">

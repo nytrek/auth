@@ -5,11 +5,10 @@ import {
   signIn,
   useSession,
 } from "next-auth/react";
-import Link from "next/link";
 import Router from "next/router";
 import { useEffect } from "react";
-import { toast } from "react-hot-toast";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 
 const signInWrapper = async (payload: SignInOptions) => {
   const response = (await signIn("credentials", payload)) as SignInResponse;
@@ -108,12 +107,12 @@ export default function Home() {
 
         <p className="mt-10 text-center text-sm text-gray-400">
           Not a member?{" "}
-          <Link
-            href="/signup"
+          <button
+            type="button"
             className="font-semibold leading-6 text-indigo-400 hover:text-indigo-300"
           >
             Sign Up
-          </Link>
+          </button>
         </p>
       </div>
     </div>
